@@ -1,6 +1,6 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'bypass-cloudflare-for-github-action'
+description: 'bypass cloudflare for github action, never receive 403 forbidden from cloudflare again.'
+author: 'Snowdream Tech'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
