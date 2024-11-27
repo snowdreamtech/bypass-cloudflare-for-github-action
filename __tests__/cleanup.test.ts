@@ -7,16 +7,16 @@
  */
 
 import * as core from '@actions/core'
-import * as main from '../src/main'
+import * as cleanup from '../src/cleanup'
 import * as single from '../src/single'
 import * as list from '../src/list'
 import * as ipinfo from '../src/ipinfo'
 import * as githubmeta from '../src/githubmeta'
 
 // Mock the action's main function
-const runMock = jest.spyOn(main, 'run')
-const runSingleMock = jest.spyOn(single, 'run')
-const runListMock = jest.spyOn(list, 'run')
+const runMock = jest.spyOn(cleanup, 'run')
+const cleanSingleMock = jest.spyOn(single, 'clean')
+const cleanListMock = jest.spyOn(list, 'clean')
 const publicipMock = jest.spyOn(ipinfo, 'public_ip')
 const githubmetaMock = jest.spyOn(githubmeta, 'github_meta')
 
@@ -60,7 +60,7 @@ describe('main.ts', () => {
         }
       })
 
-      await main.run()
+      await cleanup.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -99,7 +99,7 @@ describe('main.ts', () => {
         }
       })
 
-      await main.run()
+      await cleanup.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -127,8 +127,8 @@ describe('main.ts', () => {
         'Done for bypass cloudflare for github action'
       )
 
-      expect(runSingleMock).toHaveBeenCalled()
-      expect(runListMock).not.toHaveBeenCalled()
+      expect(cleanSingleMock).toHaveBeenCalled()
+      expect(cleanListMock).not.toHaveBeenCalled()
     })
 
     it('should runList when mode is: list', async () => {
@@ -141,7 +141,7 @@ describe('main.ts', () => {
         }
       })
 
-      await main.run()
+      await cleanup.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -169,8 +169,8 @@ describe('main.ts', () => {
         'Done for bypass cloudflare for github action'
       )
 
-      expect(runSingleMock).not.toHaveBeenCalled()
-      expect(runListMock).toHaveBeenCalled()
+      expect(cleanSingleMock).not.toHaveBeenCalled()
+      expect(cleanListMock).toHaveBeenCalled()
     })
 
     it('should runGithub when mode is: github', async () => {
@@ -183,7 +183,7 @@ describe('main.ts', () => {
         }
       })
 
-      await main.run()
+      await cleanup.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -215,8 +215,8 @@ describe('main.ts', () => {
         'Done for bypass cloudflare for github action'
       )
 
-      expect(runSingleMock).not.toHaveBeenCalled()
-      expect(runListMock).toHaveBeenCalled()
+      expect(cleanSingleMock).not.toHaveBeenCalled()
+      expect(cleanListMock).toHaveBeenCalled()
     })
 
     it('should runList when mode is: others', async () => {
@@ -229,7 +229,7 @@ describe('main.ts', () => {
         }
       })
 
-      await main.run()
+      await cleanup.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -257,8 +257,8 @@ describe('main.ts', () => {
         'Done for bypass cloudflare for github action'
       )
 
-      expect(runSingleMock).not.toHaveBeenCalled()
-      expect(runListMock).toHaveBeenCalled()
+      expect(cleanSingleMock).not.toHaveBeenCalled()
+      expect(cleanListMock).toHaveBeenCalled()
     })
   })
 })

@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
-import { run as runSingle } from './single'
-import { run as runList } from './list'
+import { clean as cleanSingle } from './single'
+import { clean as cleanList } from './list'
 import { public_ip } from './ipinfo'
 import { GitHubMeta, github_meta } from './githubmeta'
 
@@ -27,18 +27,18 @@ export async function run(): Promise<void> {
   for (let mode of modelist) {
     switch (mode) {
       case 'single':
-        runSingle(ip)
+        cleanSingle(ip)
         break
       case 'list':
-        runList(ip)
+        cleanList(ip)
         break
       case 'github':
         core.info('Get the IPV4 and IPV6 List for the github actions runners.')
         const ips = await github_meta()
-        runList(ips)
+        cleanList(ips)
         break
       default:
-        runList(ip)
+        cleanList(ip)
         break
     }
   }

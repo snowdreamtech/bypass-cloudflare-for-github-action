@@ -1,24 +1,53 @@
-name: 'bypass-cloudflare-for-github-action'
-description: 'bypass cloudflare for github action, never receive 403 forbidden from cloudflare again.'
-author: 'Snowdream Tech'
+name: "bypass-cloudflare-for-github-action"
+description: "bypass cloudflare for github action, never receive 403 forbidden from cloudflare again."
+author: "Snowdream Tech"
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'activity'
+  icon: "activity"
   color: "green"
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  mode:
+    description: "single/list/github"
+    required: false
+    default: "github"
+  cf_zone_id:
+    description: "Cloudflare Zone ID"
     required: true
-    default: '1000'
+  cf_api_token:
+    description: "Cloudflare API Token"
+    required: true
+  cf_account_id:
+    description: "Cloudflare Account ID"
+    required: true
+  github_api_token:
+    description: "Github API Token"
+    required: true
+  single_rule_description:
+    description: "Rule Description For Mode Single"
+    required: false
+    default: "Bypass Cloudflare for GitHub Action (Single)"
+  list_rule_description:
+    description: "Rule Description For Mode List"
+    required: false
+    default: "Bypass Cloudflare for GitHub Action (List)"
+  list_name:
+    description: "List name"
+    required: false
+    default: "github_actions_runners"
 
 # Define your outputs here.
 outputs:
   time:
-    description: 'Your output description here'
+    description: "Your output description here"
+  ruleset_id:
+    value: ${{ env.ruleset_id }}
+    description: "The ID of the created custom rule"
 
 runs:
   using: node20
-  main: dist/index.js
+  pre: "dist/setup.js"
+  main: "dist/index.js"
+  post: "dist/cleanup.js"
