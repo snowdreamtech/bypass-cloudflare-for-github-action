@@ -57,9 +57,11 @@ export async function run(ip: string): Promise<void> {
     core.info('Getting the custom zone rules')
     const zone_custom_rules = zone_custom_ruleset.rules
 
-    let singlezonerule: ZoneRule
+    let singlezonerule: ZoneRule | undefined
 
-    for (const zonerule of zone_custom_rules) {
+    for (let i = 0; i < zone_custom_rules.length; i++) {
+      const zonerule = zone_custom_rules[i]
+
       if (zonerule.description == single_rule_description) {
         // update expression
         let expression = zonerule.expression
@@ -188,9 +190,11 @@ export async function clean(): Promise<void> {
     core.info('Getting the custom zone rules')
     const zone_custom_rules = zone_custom_ruleset.rules
 
-    let singlezonerule: ZoneRule
+    let singlezonerule: ZoneRule | undefined
 
-    for (const zonerule of zone_custom_rules) {
+    for (let i = 0; i < zone_custom_rules.length; i++) {
+      const zonerule = zone_custom_rules[i]
+
       if (zonerule.description == single_rule_description) {
         zonerule.expression = ''
         zonerule.enabled = true

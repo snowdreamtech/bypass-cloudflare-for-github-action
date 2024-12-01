@@ -176,7 +176,9 @@ export async function get_custom_zone_rulesets_id(
 
     let zone_custom_rulesets_id = ''
 
-    for (const zoneruleset of zonerulesets){
+    for (let i = 0; i < zonerulesets.length; i++) {
+      const zoneruleset = zonerulesets[i]
+
       if (zoneruleset.phase == 'http_request_firewall_custom') {
         zone_custom_rulesets_id = zoneruleset.id
       }

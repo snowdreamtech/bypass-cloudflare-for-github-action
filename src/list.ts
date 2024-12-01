@@ -54,7 +54,9 @@ export async function run(ip: string | string[]): Promise<void> {
     // get the list with the list_name
     let list: ListsResultMeta | undefined
 
-    for (const _list of lists){
+    for (let i = 0; i < lists.length; i++) {
+      const _list = lists[i]
+
       if (_list.name == list_name) {
         list = _list
       }
@@ -75,14 +77,16 @@ export async function run(ip: string | string[]): Promise<void> {
     const data: ListItemResultMeta[] = []
 
     if (Array.isArray(ip)) {
-      for (const _item of ip) {
-        const item:ListItemResultMeta=  {
+      for (let i = 0; i < ip.length; i++) {
+        const _item = ip[i]
+
+        const item: ListItemResultMeta = {
           ip: _item
         }
         data.push(item)
       }
     } else {
-      const item:ListItemResultMeta=  {
+      const item: ListItemResultMeta = {
         ip: ip
       }
       data.push(item)
@@ -108,9 +112,11 @@ export async function run(ip: string | string[]): Promise<void> {
     core.info('Getting the custom zone rules')
     const zone_custom_rules = zone_custom_ruleset.rules
 
-    let listzonerule: any
+    let listzonerule: ZoneRule | undefined
 
-    for (const zonerule of zone_custom_rules){
+    for (let i = 0; i < zone_custom_rules.length; i++) {
+      const zonerule = zone_custom_rules[i]
+
       if (zonerule.description == list_rule_description) {
         listzonerule = zonerule
       }
@@ -216,8 +222,10 @@ export async function clean(): Promise<void> {
     // get the list with the list_name
     let list: ListsResultMeta | undefined
 
-    for (const _list of lists){
-     if (_list.name == list_name) {
+    for (let i = 0; i < lists.length; i++) {
+      const _list = lists[i]
+
+      if (_list.name == list_name) {
         list = _list
       }
     }
@@ -256,9 +264,11 @@ export async function clean(): Promise<void> {
     core.info('Getting the custom zone rules')
     const zone_custom_rules = zone_custom_ruleset.rules
 
-    let listzonerule: ZoneRule
+    let listzonerule: ZoneRule | undefined
 
-    for (const zonerule of zone_custom_rules){
+    for (let i = 0; i < zone_custom_rules.length; i++) {
+      const zonerule = zone_custom_rules[i]
+
       if (zonerule.description == list_rule_description) {
         listzonerule = zonerule
       }

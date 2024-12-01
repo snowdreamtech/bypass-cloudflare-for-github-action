@@ -71,17 +71,13 @@ describe('main.ts', () => {
       expect(getInputMock).toHaveNthReturnedWith(1, mode_list)
 
       expect(infoMock).toHaveBeenCalled()
-      expect(infoMock).toHaveBeenCalledTimes(4)
+      expect(infoMock).toHaveBeenCalledTimes(3)
       expect(infoMock).toHaveBeenNthCalledWith(
         1,
         'Executing bypass cloudflare for github action'
       )
       expect(infoMock).toHaveBeenNthCalledWith(
         2,
-        'Get the public ip for the github actions runner'
-      )
-      expect(infoMock).toHaveBeenNthCalledWith(
-        3,
         'The mode for bypass cloudflare for github action is: ' + mode_list
       )
       expect(infoMock).toHaveBeenLastCalledWith(
@@ -110,17 +106,13 @@ describe('main.ts', () => {
       expect(getInputMock).toHaveNthReturnedWith(1, mode_single)
 
       expect(infoMock).toHaveBeenCalled()
-      expect(infoMock).toHaveBeenCalledTimes(4)
+      expect(infoMock).toHaveBeenCalledTimes(3)
       expect(infoMock).toHaveBeenNthCalledWith(
         1,
         'Executing bypass cloudflare for github action'
       )
       expect(infoMock).toHaveBeenNthCalledWith(
         2,
-        'Get the public ip for the github actions runner'
-      )
-      expect(infoMock).toHaveBeenNthCalledWith(
-        3,
         'The mode for bypass cloudflare for github action is: ' + mode_single
       )
       expect(infoMock).toHaveBeenLastCalledWith(
@@ -152,17 +144,13 @@ describe('main.ts', () => {
       expect(getInputMock).toHaveNthReturnedWith(1, mode_list)
 
       expect(infoMock).toHaveBeenCalled()
-      expect(infoMock).toHaveBeenCalledTimes(4)
+      expect(infoMock).toHaveBeenCalledTimes(3)
       expect(infoMock).toHaveBeenNthCalledWith(
         1,
         'Executing bypass cloudflare for github action'
       )
       expect(infoMock).toHaveBeenNthCalledWith(
         2,
-        'Get the public ip for the github actions runner'
-      )
-      expect(infoMock).toHaveBeenNthCalledWith(
-        3,
         'The mode for bypass cloudflare for github action is: ' + mode_list
       )
       expect(infoMock).toHaveBeenLastCalledWith(
@@ -194,22 +182,14 @@ describe('main.ts', () => {
       expect(getInputMock).toHaveNthReturnedWith(1, mode_github)
 
       expect(infoMock).toHaveBeenCalled()
-      expect(infoMock).toHaveBeenCalledTimes(5)
+      expect(infoMock).toHaveBeenCalledTimes(3)
       expect(infoMock).toHaveBeenNthCalledWith(
         1,
         'Executing bypass cloudflare for github action'
       )
       expect(infoMock).toHaveBeenNthCalledWith(
         2,
-        'Get the public ip for the github actions runner'
-      )
-      expect(infoMock).toHaveBeenNthCalledWith(
-        3,
         'The mode for bypass cloudflare for github action is: ' + mode_github
-      )
-      expect(infoMock).toHaveBeenNthCalledWith(
-        4,
-        'Get the IPV4 and IPV6 List for the github actions runners.'
       )
       expect(infoMock).toHaveBeenLastCalledWith(
         'Done for bypass cloudflare for github action'
@@ -240,17 +220,13 @@ describe('main.ts', () => {
       expect(getInputMock).toHaveNthReturnedWith(1, '')
 
       expect(infoMock).toHaveBeenCalled()
-      expect(infoMock).toHaveBeenCalledTimes(4)
+      expect(infoMock).toHaveBeenCalledTimes(3)
       expect(infoMock).toHaveBeenNthCalledWith(
         1,
         'Executing bypass cloudflare for github action'
       )
       expect(infoMock).toHaveBeenNthCalledWith(
         2,
-        'Get the public ip for the github actions runner'
-      )
-      expect(infoMock).toHaveBeenNthCalledWith(
-        3,
         'The mode for bypass cloudflare for github action is: ' + ''
       )
       expect(infoMock).toHaveBeenLastCalledWith(

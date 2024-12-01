@@ -24,7 +24,9 @@ export async function run(): Promise<void> {
   )
   const modelist: string[] = modestring.split(',')
 
-  for (const mode of modelist) {
+  for (let i = 0; i < modelist.length; i++) {
+    const mode = modelist[i]
+
     switch (mode) {
       case 'single': {
         await runSingle(ip)
