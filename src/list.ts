@@ -129,7 +129,7 @@ export async function run(ip: string | string[]): Promise<void> {
     } else {
       const data = {
         action: 'skip',
-        expression: `(ip.src in \$$list_name)`,
+        expression: `(ip.src in $list_name)`,
         description: `${list_rule_description}`,
         enabled: true,
         logging: {
@@ -277,7 +277,7 @@ export async function clean(): Promise<void> {
     } else {
       const data = {
         action: 'skip',
-        expression: `(ip.src in \$$list_name)`,
+        expression: `(ip.src in $list_name)`,
         description: `${list_rule_description}`,
         enabled: true,
         logging: {
