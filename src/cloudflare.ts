@@ -118,11 +118,11 @@ export interface ListItemsMeta {
 
 // Define an interface for ListItemResultMeta
 export interface ListItemResultMeta {
-  id: string
+  id?: string
   ip: string
-  comment: string
-  created_on: Date
-  modified_on: Date
+  comment?: string
+  created_on?: Date
+  modified_on?: Date
 }
 
 /**

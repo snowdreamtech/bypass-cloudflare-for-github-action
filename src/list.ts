@@ -10,7 +10,8 @@ import {
   update_all_list_items,
   create_list,
   ListsResultMeta,
-  ZoneRule
+  ZoneRule,
+  ListItemResultMeta
 } from './cloudflare'
 
 /**
@@ -71,18 +72,20 @@ export async function run(ip: string | string[]): Promise<void> {
       list = await create_list(cf_account_id, cf_api_token, data)
     }
 
-    const data: any = []
+    const data: ListItemResultMeta[] = []
 
     if (Array.isArray(ip)) {
-      for (const item of ip) {
-        data.push({
-          ip: item
-        })
+      for (const _item of ip) {
+        const item:ListItemResultMeta=  {
+          ip: _item
+        }
+        data.push(item)
       }
     } else {
-      data.push({
+      const item:ListItemResultMeta=  {
         ip: ip
-      })
+      }
+      data.push(item)
     }
 
     await create_list_items(cf_account_id, cf_api_token, list.id, data)
