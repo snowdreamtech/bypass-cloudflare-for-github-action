@@ -23,7 +23,7 @@ export async function public_ip(): Promise<string> {
     const response = await fetch(url, {
       headers: {
         Accept: 'application/json',
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       }
     })
 
@@ -31,7 +31,7 @@ export async function public_ip(): Promise<string> {
       reject(new Error(`Response status: ${response.status}`))
     }
 
-    const ipdata = await response.json() as IPMeta
+    const ipdata = (await response.json()) as IPMeta
 
     if (!ipdata || !ipdata.ip) {
       reject(new Error('Public IP Not Found.'))

@@ -17,7 +17,7 @@ export async function run(ip: string): Promise<void> {
     const cf_zone_id: string = core.getInput('cf_zone_id')
     const cf_api_token: string = core.getInput('cf_api_token')
     const cf_account_id: string = core.getInput('cf_account_id')
-    
+
     let single_rule_description: string = core.getInput(
       'single_rule_description'
     )
@@ -141,7 +141,6 @@ export async function run(ip: string): Promise<void> {
   }
 }
 
-
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -151,7 +150,7 @@ export async function clean(ip: string): Promise<void> {
     const cf_zone_id: string = core.getInput('cf_zone_id')
     const cf_api_token: string = core.getInput('cf_api_token')
     const cf_account_id: string = core.getInput('cf_account_id')
-    
+
     let single_rule_description: string = core.getInput(
       'single_rule_description'
     )
@@ -197,7 +196,7 @@ export async function clean(ip: string): Promise<void> {
       const zonerule = zone_custom_rules[i]
 
       if (zonerule.description == single_rule_description) {
-        zonerule.expression = ""
+        zonerule.expression = ''
         zonerule.enabled = true
 
         singlezonerule = zonerule
@@ -214,7 +213,7 @@ export async function clean(ip: string): Promise<void> {
         singlezonerule.id,
         singlezonerule
       )
-    } 
+    }
 
     // Set outputs for other workflow steps to use
     core.setOutput('time', new Date().toTimeString())

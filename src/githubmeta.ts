@@ -30,14 +30,13 @@ export async function github_meta(): Promise<Array<string>> {
     })
 
     if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`));
+      reject(new Error(`Response status: ${response.status}`))
     }
 
-    const githubmeta = await response.json() as GitHubMeta
+    const githubmeta = (await response.json()) as GitHubMeta
 
-    githubmeta.actions.push.apply(githubmeta.actions,githubmeta.actions_macos)
+    githubmeta.actions.push.apply(githubmeta.actions, githubmeta.actions_macos)
 
     resolve(githubmeta.actions)
   })
 }
-    

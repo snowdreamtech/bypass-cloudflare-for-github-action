@@ -12,7 +12,6 @@ let getInputMock: jest.SpiedFunction<typeof core.getInput>
 let setFailedMock: jest.SpiedFunction<typeof core.setFailed>
 let setOutputMock: jest.SpiedFunction<typeof core.setOutput>
 
-
 // https://api.github.com/meta
 const github_meta_data = {
   verifiable_password_authentication: false,
@@ -5385,7 +5384,7 @@ describe('github.ts', () => {
       getInputMock.mockImplementation(name => {
         switch (name) {
           case 'github_api_token':
-            return "b63638d093bb467a823be69f78eb6b17"
+            return 'b63638d093bb467a823be69f78eb6b17'
           default:
             return ''
         }
@@ -5410,7 +5409,7 @@ describe('github.ts', () => {
       getInputMock.mockImplementation(name => {
         switch (name) {
           case 'github_api_token':
-            return ""
+            return ''
           default:
             return ''
         }
@@ -5424,21 +5423,19 @@ describe('github.ts', () => {
         }) as Promise<Response>
       )
 
-      await expect(github_meta()).rejects.toThrow(
-        'github_api_token is empty'
-      )
+      await expect(github_meta()).rejects.toThrow('github_api_token is empty')
     })
 
     it('should throw Error with status 403', async () => {
       getInputMock.mockImplementation(name => {
         switch (name) {
           case 'github_api_token':
-            return "b63638d093bb467a823be69f78eb6b17"
+            return 'b63638d093bb467a823be69f78eb6b17'
           default:
             return ''
         }
       })
-      
+
       jest.spyOn(global, 'fetch').mockResolvedValue(
         Promise.resolve({
           ok: false,
@@ -5447,9 +5444,7 @@ describe('github.ts', () => {
         }) as Promise<Response>
       )
 
-      await expect(github_meta()).rejects.toThrow(
-        'Response status: 403'
-      )
+      await expect(github_meta()).rejects.toThrow('Response status: 403')
     })
   })
 })
