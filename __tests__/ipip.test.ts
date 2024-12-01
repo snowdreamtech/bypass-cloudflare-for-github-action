@@ -21,7 +21,7 @@ describe('ipip.ts', () => {
         Promise.resolve({
           ok: true,
           status: 200,
-          json: () => Promise.resolve(ipmeta)
+          json: async () => Promise.resolve(ipmeta)
         }) as Promise<Response>
       )
 
@@ -37,13 +37,13 @@ describe('ipip.ts', () => {
         }
       }
 
-      const ip = '128.169.188.141'
+      // const ip = '128.169.188.141'
 
       jest.spyOn(global, 'fetch').mockResolvedValue(
         Promise.resolve({
           ok: false,
           status: 403,
-          json: () => Promise.resolve(ipmeta)
+          json: async () => Promise.resolve(ipmeta)
         }) as Promise<Response>
       )
 
@@ -59,13 +59,13 @@ describe('ipip.ts', () => {
         }
       }
 
-      const ip = '128.169.188.141'
+      // const ip = '128.169.188.141'
 
       jest.spyOn(global, 'fetch').mockResolvedValue(
         Promise.resolve({
           ok: true,
           status: 200,
-          json: () => Promise.resolve(ipmeta)
+          json: async () => Promise.resolve(ipmeta)
         }) as Promise<Response>
       )
 
@@ -81,13 +81,13 @@ describe('ipip.ts', () => {
         }
       }
 
-      const ip = '128.169.188.141'
+      // const ip = '128.169.188.141'
 
       jest.spyOn(global, 'fetch').mockResolvedValue(
         Promise.resolve({
           ok: true,
           status: 200,
-          json: () => Promise.resolve(ipmeta)
+          json: async () => Promise.resolve(ipmeta)
         }) as Promise<Response>
       )
 

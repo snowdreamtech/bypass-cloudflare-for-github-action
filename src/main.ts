@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import { run as runSingle } from './single'
 import { run as runList } from './list'
 import { public_ip } from './ipinfo'
-import { GitHubMeta, github_meta } from './githubmeta'
+import { github_meta } from './githubmeta'
 
 /**
  * The main function for the action.
@@ -16,7 +16,7 @@ export async function run(): Promise<void> {
   core.info('Get the public ip for the github actions runner')
   const ip = await public_ip()
 
-  let modestring: string = core.getInput('mode')
+  const modestring: string = core.getInput('mode')
 
   // Mode
   core.info(
@@ -24,22 +24,26 @@ export async function run(): Promise<void> {
   )
   const modelist: string[] = modestring.split(',')
 
-  for (let mode of modelist) {
+  for (const mode of modelist) {
     switch (mode) {
-      case 'single':
-        runSingle(ip)
+      case 'single': {
+        await runSingle(ip)
         break
-      case 'list':
-        runList(ip)
+      }
+      case 'list': {
+        await runList(ip)
         break
-      case 'github':
+      }
+      case 'github': {
         core.info('Get the IPV4 and IPV6 List for the github actions runners.')
         const ips = await github_meta()
-        runList(ips)
+        await runList(ips)
         break
-      default:
-        runList(ip)
+      }
+      default: {
+        await runList(ip)
         break
+      }
     }
   }
 

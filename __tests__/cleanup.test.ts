@@ -20,28 +20,28 @@ const cleanListMock = jest.spyOn(list, 'clean')
 const publicipMock = jest.spyOn(ipinfo, 'public_ip')
 const githubmetaMock = jest.spyOn(githubmeta, 'github_meta')
 
-const mode_single: string = 'single'
-const mode_list: string = 'list'
-const mode_github: string = 'github'
+const mode_single = 'single'
+const mode_list = 'list'
+const mode_github = 'github'
 
 // Mock the GitHub Actions core library
-let debugMock: jest.SpiedFunction<typeof core.debug>
+// let debugMock: jest.SpiedFunction<typeof core.debug>
 let infoMock: jest.SpiedFunction<typeof core.info>
-let errorMock: jest.SpiedFunction<typeof core.error>
+// let errorMock: jest.SpiedFunction<typeof core.error>
 let getInputMock: jest.SpiedFunction<typeof core.getInput>
-let setFailedMock: jest.SpiedFunction<typeof core.setFailed>
-let setOutputMock: jest.SpiedFunction<typeof core.setOutput>
+// let setFailedMock: jest.SpiedFunction<typeof core.setFailed>
+// let setOutputMock: jest.SpiedFunction<typeof core.setOutput>
 
 describe('main.ts', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-    debugMock = jest.spyOn(core, 'debug').mockImplementation()
+    // debugMock = jest.spyOn(core, 'debug').mockImplementation()
     infoMock = jest.spyOn(core, 'info').mockImplementation()
-    errorMock = jest.spyOn(core, 'error').mockImplementation()
+    // errorMock = jest.spyOn(core, 'error').mockImplementation()
     getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
-    setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
-    setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+    // setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
+    // setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
   })
 
   afterEach(() => {})

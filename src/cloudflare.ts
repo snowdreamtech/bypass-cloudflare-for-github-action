@@ -174,11 +174,9 @@ export async function get_custom_zone_rulesets_id(
       reject(new Error('ZoneRulesets Not found.'))
     }
 
-    let zone_custom_rulesets_id: string = ''
+    let zone_custom_rulesets_id = ''
 
-    for (let i = 0; i < zonerulesets.length; ++i) {
-      const zoneruleset = zonerulesets[i]
-
+    for (const zoneruleset of zonerulesets){
       if (zoneruleset.phase == 'http_request_firewall_custom') {
         zone_custom_rulesets_id = zoneruleset.id
       }
@@ -749,9 +747,9 @@ export async function get_list_items(
   cf_account_id: string,
   cf_api_token: string,
   list_id: string,
-  cursor: string = '',
-  per_page: number = 500,
-  search: string = ''
+  cursor = '',
+  per_page = 500,
+  search = ''
 ): Promise<ListItemResultMeta[]> {
   return new Promise(async (resolve, reject) => {
     const params = new URLSearchParams()

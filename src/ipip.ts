@@ -1,5 +1,3 @@
-import { rejects } from 'assert'
-
 // Define an interface for IPIPMeta
 export interface IPIPMeta {
   ip: string

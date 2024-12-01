@@ -57,11 +57,9 @@ export async function run(ip: string): Promise<void> {
     core.info('Getting the custom zone rules')
     const zone_custom_rules = zone_custom_ruleset.rules
 
-    let singlezonerule: any
+    let singlezonerule: ZoneRule
 
-    for (let i = 0; i < zone_custom_rules.length; ++i) {
-      const zonerule = zone_custom_rules[i]
-
+    for (const zonerule of zone_custom_rules) {
       if (zonerule.description == single_rule_description) {
         // update expression
         let expression = zonerule.expression
@@ -145,7 +143,7 @@ export async function run(ip: string): Promise<void> {
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-export async function clean(ip: string): Promise<void> {
+export async function clean(): Promise<void> {
   try {
     const cf_zone_id: string = core.getInput('cf_zone_id')
     const cf_api_token: string = core.getInput('cf_api_token')
@@ -190,11 +188,9 @@ export async function clean(ip: string): Promise<void> {
     core.info('Getting the custom zone rules')
     const zone_custom_rules = zone_custom_ruleset.rules
 
-    let singlezonerule: any
+    let singlezonerule: ZoneRule
 
-    for (let i = 0; i < zone_custom_rules.length; ++i) {
-      const zonerule = zone_custom_rules[i]
-
+    for (const zonerule of zone_custom_rules) {
       if (zonerule.description == single_rule_description) {
         zonerule.expression = ''
         zonerule.enabled = true

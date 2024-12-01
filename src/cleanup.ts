@@ -1,8 +1,7 @@
 import * as core from '@actions/core'
 import { clean as cleanSingle } from './single'
 import { clean as cleanList } from './list'
-import { public_ip } from './ipinfo'
-import { GitHubMeta, github_meta } from './githubmeta'
+// import { public_ip } from './ipinfo'
 
 /**
  * The main function for the action.
@@ -13,10 +12,10 @@ export async function run(): Promise<void> {
   core.info('Executing bypass cloudflare for github action')
 
   // get the public ip for the github actions runner
-  core.info('Get the public ip for the github actions runner')
-  const ip = await public_ip()
+  // core.info('Get the public ip for the github actions runner')
+  // const ip = await public_ip()
 
-  let modestring: string = core.getInput('mode')
+  const modestring: string = core.getInput('mode')
 
   // Mode
   core.info(
@@ -24,22 +23,26 @@ export async function run(): Promise<void> {
   )
   const modelist: string[] = modestring.split(',')
 
-  for (let mode of modelist) {
+  for (const mode of modelist) {
     switch (mode) {
-      case 'single':
-        cleanSingle(ip)
+      case 'single': {
+        await cleanSingle()
         break
-      case 'list':
-        cleanList(ip)
+      }
+      case 'list': {
+        await cleanList()
         break
-      case 'github':
-        core.info('Get the IPV4 and IPV6 List for the github actions runners.')
-        const ips = await github_meta()
-        cleanList(ips)
+      }
+      case 'github': {
+        // core.info('Get the IPV4 and IPV6 List for the github actions runners.')
+        // const ips = await github_meta()
+        await cleanList()
         break
-      default:
-        cleanList(ip)
+      }
+      default: {
+        await cleanList()
         break
+      }
     }
   }
 

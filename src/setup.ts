@@ -2,9 +2,9 @@ import * as core from '@actions/core'
 
 /**
  * The pre function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
+ * @returns void Resolves when the action is complete.
  */
-export async function run(): Promise<void> {
+export function run(): void {
   try {
     // Preparing for bypass cloudflare for github action
     core.info('Preparing for bypass cloudflare for github action.')

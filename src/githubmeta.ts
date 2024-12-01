@@ -11,7 +11,7 @@ export interface GitHubMeta {
  *
  * @returns {Promise<Array<string>>} The IPV4 and IPV6 List for the github actions runners.
  */
-export async function github_meta(): Promise<Array<string>> {
+export async function github_meta(): Promise<string[]> {
   return new Promise(async (resolve, reject) => {
     const github_api_token: string = core.getInput('github_api_token')
 
@@ -35,8 +35,6 @@ export async function github_meta(): Promise<Array<string>> {
 
     const githubmeta = (await response.json()) as GitHubMeta
 
-    githubmeta.actions.push.apply(githubmeta.actions, githubmeta.actions_macos)
-
-    resolve(githubmeta.actions)
+    resolve([...githubmeta.actions, ...githubmeta.actions_macos])
   })
 }

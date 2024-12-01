@@ -9,15 +9,15 @@ import {
   create_list_items,
   update_all_list_items,
   create_list,
-  ZoneRule,
-  ListsResultMeta
+  ListsResultMeta,
+  ZoneRule
 } from './cloudflare'
 
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-export async function run(ip: string | Array<string>): Promise<void> {
+export async function run(ip: string | string[]): Promise<void> {
   try {
     const cf_zone_id: string = core.getInput('cf_zone_id')
     const cf_api_token: string = core.getInput('cf_api_token')
@@ -53,9 +53,9 @@ export async function run(ip: string | Array<string>): Promise<void> {
     // get the list with the list_name
     let list: ListsResultMeta | undefined
 
-    for (let i = 0; i < lists.length; ++i) {
-      if (lists[i].name == list_name) {
-        list = lists[i]
+    for (const _list of lists){
+      if (_list.name == list_name) {
+        list = _list
       }
     }
 
@@ -71,10 +71,10 @@ export async function run(ip: string | Array<string>): Promise<void> {
       list = await create_list(cf_account_id, cf_api_token, data)
     }
 
-    let data: any = []
+    const data: any = []
 
     if (Array.isArray(ip)) {
-      for (let item of ip) {
+      for (const item of ip) {
         data.push({
           ip: item
         })
@@ -107,9 +107,7 @@ export async function run(ip: string | Array<string>): Promise<void> {
 
     let listzonerule: any
 
-    for (let i = 0; i < zone_custom_rules.length; ++i) {
-      const zonerule = zone_custom_rules[i]
-
+    for (const zonerule of zone_custom_rules){
       if (zonerule.description == list_rule_description) {
         listzonerule = zonerule
       }
@@ -179,7 +177,7 @@ export async function run(ip: string | Array<string>): Promise<void> {
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-export async function clean(ip: string | Array<string>): Promise<void> {
+export async function clean(): Promise<void> {
   try {
     const cf_zone_id: string = core.getInput('cf_zone_id')
     const cf_api_token: string = core.getInput('cf_api_token')
@@ -215,9 +213,9 @@ export async function clean(ip: string | Array<string>): Promise<void> {
     // get the list with the list_name
     let list: ListsResultMeta | undefined
 
-    for (let i = 0; i < lists.length; ++i) {
-      if (lists[i].name == list_name) {
-        list = lists[i]
+    for (const _list of lists){
+     if (_list.name == list_name) {
+        list = _list
       }
     }
 
@@ -233,7 +231,7 @@ export async function clean(ip: string | Array<string>): Promise<void> {
       list = await create_list(cf_account_id, cf_api_token, data)
     }
 
-    let data: any = []
+    const data: any = []
 
     await update_all_list_items(cf_account_id, cf_api_token, list.id, data)
 
@@ -255,11 +253,9 @@ export async function clean(ip: string | Array<string>): Promise<void> {
     core.info('Getting the custom zone rules')
     const zone_custom_rules = zone_custom_ruleset.rules
 
-    let listzonerule: any
+    let listzonerule: ZoneRule
 
-    for (let i = 0; i < zone_custom_rules.length; ++i) {
-      const zonerule = zone_custom_rules[i]
-
+    for (const zonerule of zone_custom_rules){
       if (zonerule.description == list_rule_description) {
         listzonerule = zonerule
       }

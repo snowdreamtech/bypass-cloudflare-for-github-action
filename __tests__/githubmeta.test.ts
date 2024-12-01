@@ -2,15 +2,15 @@
  * Unit tests for src/github.ts
  */
 import * as core from '@actions/core'
-import { GitHubMeta, github_meta } from '../src/githubmeta'
+import { github_meta } from '../src/githubmeta'
 
 // Mock the GitHub Actions core library
-let debugMock: jest.SpiedFunction<typeof core.debug>
-let infoMock: jest.SpiedFunction<typeof core.info>
-let errorMock: jest.SpiedFunction<typeof core.error>
+// let debugMock: jest.SpiedFunction<typeof core.debug>
+// let infoMock: jest.SpiedFunction<typeof core.info>
+// let errorMock: jest.SpiedFunction<typeof core.error>
 let getInputMock: jest.SpiedFunction<typeof core.getInput>
-let setFailedMock: jest.SpiedFunction<typeof core.setFailed>
-let setOutputMock: jest.SpiedFunction<typeof core.setOutput>
+// let setFailedMock: jest.SpiedFunction<typeof core.setFailed>
+// let setOutputMock: jest.SpiedFunction<typeof core.setOutput>
 
 // https://api.github.com/meta
 const github_meta_data = {
@@ -5369,12 +5369,12 @@ describe('github.ts', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
-    debugMock = jest.spyOn(core, 'debug').mockImplementation()
-    infoMock = jest.spyOn(core, 'info').mockImplementation()
-    errorMock = jest.spyOn(core, 'error').mockImplementation()
+    // debugMock = jest.spyOn(core, 'debug').mockImplementation()
+    // infoMock = jest.spyOn(core, 'info').mockImplementation()
+    // errorMock = jest.spyOn(core, 'error').mockImplementation()
     getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
-    setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
-    setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+    // setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
+    // setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
   })
 
   afterEach(() => {})
@@ -5394,13 +5394,12 @@ describe('github.ts', () => {
         Promise.resolve({
           ok: true,
           status: 200,
-          json: () => Promise.resolve(github_meta_data)
+          json: async () => Promise.resolve(github_meta_data)
         }) as Promise<Response>
       )
 
       const github_actions_runners = await github_meta()
 
-      expect(github_actions_runners).toBeDefined
       expect(Array.isArray(github_actions_runners)).toBe(true)
       expect(github_actions_runners.length).toBeGreaterThan(0)
     })
@@ -5419,7 +5418,7 @@ describe('github.ts', () => {
         Promise.resolve({
           ok: true,
           status: 200,
-          json: () => Promise.resolve(github_meta_data)
+          json: async () => Promise.resolve(github_meta_data)
         }) as Promise<Response>
       )
 
@@ -5440,7 +5439,7 @@ describe('github.ts', () => {
         Promise.resolve({
           ok: false,
           status: 403,
-          json: () => Promise.resolve(github_meta_data)
+          json: async () => Promise.resolve(github_meta_data)
         }) as Promise<Response>
       )
 
