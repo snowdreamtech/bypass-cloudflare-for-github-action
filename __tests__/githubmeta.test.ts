@@ -5445,5 +5445,22 @@ describe('github.ts', () => {
 
       await expect(github_meta()).rejects.toThrow('Response status: 403')
     })
+
+    it('should throw TypeError: fetch failed', async () => {
+      getInputMock.mockImplementation(name => {
+        switch (name) {
+          case 'github_api_token':
+            return 'b63638d093bb467a823be69f78eb6b17'
+          default:
+            return ''
+        }
+      })
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(github_meta()).rejects.toThrow('TypeError: fetch failed')
+    })
   })
 })

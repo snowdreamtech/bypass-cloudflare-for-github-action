@@ -357,6 +357,19 @@ describe('cloudflare.ts', () => {
         get_custom_zone_rulesets_id(cf_zone_id, cf_api_token)
       ).rejects.toThrow('zone_custom_rulesets_id Not found.')
     })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_zone_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        get_custom_zone_rulesets_id(cf_zone_id, cf_api_token)
+      ).rejects.toThrow('TypeError: fetch failed')
+    })
   })
 
   describe('get_custom_zone_ruleset', () => {
@@ -641,6 +654,20 @@ describe('cloudflare.ts', () => {
       await expect(
         get_custom_zone_ruleset(cf_zone_id, cf_api_token, ruleset_id)
       ).rejects.toThrow('ZoneRuleset Not found.')
+    })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_zone_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+      const ruleset_id = '0890d49c7ecd89e4abef674d77b2e766'
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        get_custom_zone_ruleset(cf_zone_id, cf_api_token, ruleset_id)
+      ).rejects.toThrow('TypeError: fetch failed')
     })
   })
 
@@ -1114,6 +1141,45 @@ describe('cloudflare.ts', () => {
       await expect(
         create_custom_zone_rule(cf_zone_id, cf_api_token, ruleset_id, data)
       ).rejects.toThrow('ZoneRuleset Not found.')
+    })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_zone_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+      const ruleset_id = '0890d49c7ecd89e4abef674d77b2e766'
+
+      const data = {
+        action: 'skip',
+        action_parameters: {
+          phases: [
+            'http_ratelimit',
+            'http_request_firewall_managed',
+            'http_request_sbfm'
+          ],
+          products: [
+            'waf',
+            'rateLimit',
+            'securityLevel',
+            'hot',
+            'bic',
+            'uaBlock',
+            'zoneLockdown'
+          ],
+          ruleset: 'current'
+        },
+        description: 'test',
+        enabled: true,
+        expression:
+          '(ip.src eq 150.136.52.14) or (ip.src eq 132.145.163.239) or (ip.src eq 66.135.17.160)'
+      }
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        create_custom_zone_rule(cf_zone_id, cf_api_token, ruleset_id, data)
+      ).rejects.toThrow('TypeError: fetch failed')
     })
   })
 
@@ -1653,6 +1719,59 @@ describe('cloudflare.ts', () => {
         )
       ).rejects.toThrow('ZoneRuleset Not found.')
     })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_zone_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+      const ruleset_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const rule_id = '0890d49c7ecd89e4abef674d77b2e766'
+
+      const data = {
+        action: 'skip',
+        action_parameters: {
+          phases: [
+            'http_ratelimit',
+            'http_request_firewall_managed',
+            'http_request_sbfm'
+          ],
+          products: [
+            'waf',
+            'rateLimit',
+            'securityLevel',
+            'hot',
+            'bic',
+            'uaBlock',
+            'zoneLockdown'
+          ],
+          ruleset: 'current'
+        },
+        description: 'test 11',
+        enabled: true,
+        expression:
+          '(ip.src eq 150.136.52.14) or (ip.src eq 132.145.163.239) or (ip.src eq 66.135.17.160)',
+        id: 'a471f6e4e6da48d3a0c444a0e6d357b1',
+        last_updated: '2024-11-27T13:08:16.577727Z',
+        logging: {
+          enabled: true
+        },
+        ref: 'a471f6e4e6da48d3a0c444a0e6d357b1',
+        version: '1'
+      }
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        update_custom_zone_rule(
+          cf_zone_id,
+          cf_api_token,
+          ruleset_id,
+          rule_id,
+          data
+        )
+      ).rejects.toThrow('TypeError: fetch failed')
+    })
   })
 
   describe('delete_custom_zone_rule', () => {
@@ -1944,6 +2063,21 @@ describe('cloudflare.ts', () => {
         delete_custom_zone_rule(cf_zone_id, cf_api_token, ruleset_id, rule_id)
       ).rejects.toThrow('ZoneRuleset Not found.')
     })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_zone_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+      const ruleset_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const rule_id = '0890d49c7ecd89e4abef674d77b2e766'
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        delete_custom_zone_rule(cf_zone_id, cf_api_token, ruleset_id, rule_id)
+      ).rejects.toThrow('TypeError: fetch failed')
+    })
   })
 
   describe('get_lists', () => {
@@ -2072,6 +2206,19 @@ describe('cloudflare.ts', () => {
 
       await expect(get_lists(cf_account_id, cf_api_token)).rejects.toThrow(
         'Lists Not found.'
+      )
+    })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_account_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(get_lists(cf_account_id, cf_api_token)).rejects.toThrow(
+        'TypeError: fetch failed'
       )
     })
   })
@@ -2205,6 +2352,20 @@ describe('cloudflare.ts', () => {
       await expect(
         get_list(cf_account_id, cf_api_token, list_id)
       ).rejects.toThrow('List Not found.')
+    })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_account_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+      const list_id = 'b63638d093bb467a823be69f78eb6b17'
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        get_list(cf_account_id, cf_api_token, list_id)
+      ).rejects.toThrow('TypeError: fetch failed')
     })
   })
 
@@ -2365,6 +2526,25 @@ describe('cloudflare.ts', () => {
         create_list(cf_account_id, cf_api_token, data)
       ).rejects.toThrow('List Not found.')
     })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_account_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+
+      const data = {
+        name: 'github_actions_1',
+        description: 'github_actions 列表1',
+        kind: 'ip'
+      }
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        create_list(cf_account_id, cf_api_token, data)
+      ).rejects.toThrow('TypeError: fetch failed')
+    })
   })
 
   describe('update_list', () => {
@@ -2524,6 +2704,24 @@ describe('cloudflare.ts', () => {
         update_list(cf_account_id, cf_api_token, list_id, data)
       ).rejects.toThrow('List Not found.')
     })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_account_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+      const list_id = 'dbdd50b8de13482ca51970b8ce127b63'
+
+      const data = {
+        description: 'github_actions 列表1'
+      }
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        update_list(cf_account_id, cf_api_token, list_id, data)
+      ).rejects.toThrow('TypeError: fetch failed')
+    })
   })
 
   describe('delete_list', () => {
@@ -2641,6 +2839,20 @@ describe('cloudflare.ts', () => {
       await expect(
         delete_list(cf_account_id, cf_api_token, list_id)
       ).rejects.toThrow('List Not found.')
+    })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_account_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+      const list_id = 'dbdd50b8de13482ca51970b8ce127b63'
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        delete_list(cf_account_id, cf_api_token, list_id)
+      ).rejects.toThrow('TypeError: fetch failed')
     })
   })
 
@@ -2785,6 +2997,20 @@ describe('cloudflare.ts', () => {
       await expect(
         get_list_items(cf_account_id, cf_api_token, list_id)
       ).rejects.toThrow('List Items Not found.')
+    })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_account_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+      const list_id = 'b63638d093bb467a823be69f78eb6b17'
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        get_list_items(cf_account_id, cf_api_token, list_id)
+      ).rejects.toThrow('TypeError: fetch failed')
     })
   })
 
@@ -2962,6 +3188,31 @@ describe('cloudflare.ts', () => {
         create_list_items(cf_account_id, cf_api_token, list_id, data)
       ).rejects.toThrow('Response Or Result Not found.')
     })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_account_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+      const list_id = 'b63638d093bb467a823be69f78eb6b17'
+
+      const data = [
+        {
+          ip: '3.3.3.3',
+          comment: '3.3.3.3'
+        },
+        {
+          ip: '4.4.4.4',
+          comment: '4.4.4.4'
+        }
+      ]
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        create_list_items(cf_account_id, cf_api_token, list_id, data)
+      ).rejects.toThrow('TypeError: fetch failed')
+    })
   })
 
   describe('update_all_list_items', () => {
@@ -3136,6 +3387,31 @@ describe('cloudflare.ts', () => {
       await expect(
         update_all_list_items(cf_account_id, cf_api_token, list_id, data)
       ).rejects.toThrow('Response Or Result Not found.')
+    })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_account_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+      const list_id = 'b63638d093bb467a823be69f78eb6b17'
+
+      const data = [
+        {
+          ip: '3.3.3.3',
+          comment: '3.3.3.3'
+        },
+        {
+          ip: '4.4.4.4',
+          comment: '4.4.4.4'
+        }
+      ]
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        update_all_list_items(cf_account_id, cf_api_token, list_id, data)
+      ).rejects.toThrow('TypeError: fetch failed')
     })
   })
 
@@ -3313,6 +3589,31 @@ describe('cloudflare.ts', () => {
       await expect(
         delete_list_items(cf_account_id, cf_api_token, list_id, data)
       ).rejects.toThrow('Response Or Result Not found.')
+    })
+
+    it('should throw TypeError: fetch failed', async () => {
+      const cf_account_id = '0890d49c7ecd89e4abef674d77b2e766'
+      const cf_api_token = 'WKZDG_1owHLAWSasxxHyObz1zWH2aBdac9s0X4955'
+      const list_id = 'dbdd50b8de13482ca51970b8ce127b63'
+
+      const data = {
+        items: [
+          {
+            id: '954730a06fae437fb2dd13d74d412ee6'
+          },
+          {
+            id: '15d1d989c93f44b8b144ea244394fb17'
+          }
+        ]
+      }
+
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(
+        delete_list_items(cf_account_id, cf_api_token, list_id, data)
+      ).rejects.toThrow('TypeError: fetch failed')
     })
   })
 })

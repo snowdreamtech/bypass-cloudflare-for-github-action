@@ -93,5 +93,13 @@ describe('ipip.ts', () => {
 
       await expect(public_ip()).rejects.toThrow('Public IP Not Found.')
     })
+
+    it('should throw TypeError: fetch failed', async () => {
+      jest
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('TypeError: fetch failed'))
+
+      await expect(public_ip()).rejects.toThrow('TypeError: fetch failed')
+    })
   })
 })
