@@ -50,6 +50,6 @@ outputs:
 
 runs:
   using: node20
-  pre: 'dist/setup.js'
+  pre: 'dist/pre.js'
   main: 'dist/index.js'
-  post: 'dist/cleanup.js'
+  post: 'dist/post.js'

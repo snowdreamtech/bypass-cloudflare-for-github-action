@@ -31,7 +31,10 @@
     "format:check": "npx prettier --check .",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
     "local-action": "npx local-action . src/main.ts .env",
-    "package": "npx ncc build src/index.ts -o dist --source-map --license licenses.txt",
+    "package:index": "ncc build src/index.ts -o dist/index && mv dist/index/index.js dist/ && rm -rf dist/index",
+    "package:pre": "ncc build src/pre.ts -o dist/pre && mv dist/pre/index.js dist/pre/pre.js && mv dist/pre/pre.js dist/ && rm -rf dist/pre",
+    "package:post": "ncc build src/post.ts -o dist/post && mv dist/post/index.js dist/post/post.js && mv dist/post/post.js dist/post.js && rm -rf dist/post",
+    "package": "npm run package:index && npm run package:pre && npm run package:post",
     "package:watch": "npm run package -- --watch",
     "test": "npx jest",
     "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"

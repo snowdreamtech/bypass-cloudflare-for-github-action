@@ -1,7 +1,7 @@
 /**
  * Unit tests for src/setup.ts
  */
-import * as setup from '../src/setup'
+import * as setup from '../src/pre'
 import * as core from '@actions/core'
 
 // Mock the action's setup run function
