@@ -134,7 +134,7 @@ export async function get_custom_zone_rulesets_id(
   cf_zone_id: string,
   cf_api_token: string
 ): Promise<string> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/zones/${cf_zone_id}/rulesets`
 
     const options = {
@@ -146,49 +146,53 @@ export async function get_custom_zone_rulesets_id(
       }
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ZoneRulesetsMeta>
+      })
+      .then((zonerulesetsmeta: ZoneRulesetsMeta) => {
+        if (!zonerulesetsmeta.success) {
+          const errors = zonerulesetsmeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const zonerulesetsmeta = (await response.json()) as ZoneRulesetsMeta
+          const messages = zonerulesetsmeta.messages
 
-    if (!zonerulesetsmeta.success) {
-      const errors = zonerulesetsmeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        const zonerulesets = zonerulesetsmeta.result
 
-      const messages = zonerulesetsmeta.messages
+        if (!zonerulesets || zonerulesets.length == 0) {
+          reject(new Error('ZoneRulesets Not found.'))
+        }
 
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
+        let zone_custom_rulesets_id = ''
 
-    const zonerulesets = zonerulesetsmeta.result
+        for (let i = 0; i < zonerulesets.length; i++) {
+          const zoneruleset = zonerulesets[i]
 
-    if (!zonerulesets || zonerulesets.length == 0) {
-      reject(new Error('ZoneRulesets Not found.'))
-    }
+          if (zoneruleset.phase == 'http_request_firewall_custom') {
+            zone_custom_rulesets_id = zoneruleset.id
+          }
+        }
 
-    let zone_custom_rulesets_id = ''
+        if (!zone_custom_rulesets_id) {
+          reject(new Error('zone_custom_rulesets_id Not found.'))
+        }
 
-    for (let i = 0; i < zonerulesets.length; i++) {
-      const zoneruleset = zonerulesets[i]
-
-      if (zoneruleset.phase == 'http_request_firewall_custom') {
-        zone_custom_rulesets_id = zoneruleset.id
-      }
-    }
-
-    if (!zone_custom_rulesets_id) {
-      reject(new Error('zone_custom_rulesets_id Not found.'))
-    }
-
-    resolve(zone_custom_rulesets_id)
+        resolve(zone_custom_rulesets_id)
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -202,7 +206,7 @@ export async function get_custom_zone_ruleset(
   cf_api_token: string,
   ruleset_id: string
 ): Promise<ZoneRulesetResultMeta> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/zones/${cf_zone_id}/rulesets/${ruleset_id}`
 
     const options = {
@@ -214,35 +218,39 @@ export async function get_custom_zone_ruleset(
       }
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ZoneRulesetMeta>
+      })
+      .then((zonerulesetmeta: ZoneRulesetMeta) => {
+        if (!zonerulesetmeta.success) {
+          const errors = zonerulesetmeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const zonerulesetmeta = (await response.json()) as ZoneRulesetMeta
+          const messages = zonerulesetmeta.messages
 
-    if (!zonerulesetmeta.success) {
-      const errors = zonerulesetmeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        const zoneruleset = zonerulesetmeta.result
 
-      const messages = zonerulesetmeta.messages
+        if (!zoneruleset || !zoneruleset.id) {
+          reject(new Error('ZoneRuleset Not found.'))
+        }
 
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    const zoneruleset = zonerulesetmeta.result
-
-    if (!zoneruleset || !zoneruleset.id) {
-      reject(new Error('ZoneRuleset Not found.'))
-    }
-
-    resolve(zoneruleset)
+        resolve(zoneruleset)
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -257,7 +265,7 @@ export async function create_custom_zone_rule(
   ruleset_id: string,
   data: any
 ): Promise<ZoneRulesetResultMeta> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/zones/${cf_zone_id}/rulesets/${ruleset_id}/rules`
 
     const options = {
@@ -270,35 +278,39 @@ export async function create_custom_zone_rule(
       body: data
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ZoneRulesetMeta>
+      })
+      .then((zonerulesetmeta: ZoneRulesetMeta) => {
+        if (!zonerulesetmeta.success) {
+          const errors = zonerulesetmeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const zonerulesetmeta = (await response.json()) as ZoneRulesetMeta
+          const messages = zonerulesetmeta.messages
 
-    if (!zonerulesetmeta.success) {
-      const errors = zonerulesetmeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        const zoneruleset = zonerulesetmeta.result
 
-      const messages = zonerulesetmeta.messages
+        if (!zoneruleset || !zoneruleset.id) {
+          reject(new Error('ZoneRuleset Not found.'))
+        }
 
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    const zoneruleset = zonerulesetmeta.result
-
-    if (!zoneruleset || !zoneruleset.id) {
-      reject(new Error('ZoneRuleset Not found.'))
-    }
-
-    resolve(zoneruleset)
+        resolve(zoneruleset)
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -313,7 +325,7 @@ export async function delete_custom_zone_rule(
   ruleset_id: string,
   rule_id: string
 ): Promise<ZoneRulesetResultMeta> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/zones/${cf_zone_id}/rulesets/${ruleset_id}/rules/${rule_id}`
 
     const options = {
@@ -325,35 +337,39 @@ export async function delete_custom_zone_rule(
       }
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ZoneRulesetMeta>
+      })
+      .then((zonerulesetmeta: ZoneRulesetMeta) => {
+        if (!zonerulesetmeta.success) {
+          const errors = zonerulesetmeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const zonerulesetmeta = (await response.json()) as ZoneRulesetMeta
+          const messages = zonerulesetmeta.messages
 
-    if (!zonerulesetmeta.success) {
-      const errors = zonerulesetmeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        const zoneruleset = zonerulesetmeta.result
 
-      const messages = zonerulesetmeta.messages
+        if (!zoneruleset || !zoneruleset.id) {
+          reject(new Error('ZoneRuleset Not found.'))
+        }
 
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    const zoneruleset = zonerulesetmeta.result
-
-    if (!zoneruleset || !zoneruleset.id) {
-      reject(new Error('ZoneRuleset Not found.'))
-    }
-
-    resolve(zoneruleset)
+        resolve(zoneruleset)
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -369,7 +385,7 @@ export async function update_custom_zone_rule(
   rule_id: string,
   data: any
 ): Promise<ZoneRulesetResultMeta> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/zones/${cf_zone_id}/rulesets/${ruleset_id}/rules/${rule_id}`
 
     const options = {
@@ -382,35 +398,39 @@ export async function update_custom_zone_rule(
       body: data
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ZoneRulesetMeta>
+      })
+      .then((zonerulesetmeta: ZoneRulesetMeta) => {
+        if (!zonerulesetmeta.success) {
+          const errors = zonerulesetmeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const zonerulesetmeta = (await response.json()) as ZoneRulesetMeta
+          const messages = zonerulesetmeta.messages
 
-    if (!zonerulesetmeta.success) {
-      const errors = zonerulesetmeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        const zoneruleset = zonerulesetmeta.result
 
-      const messages = zonerulesetmeta.messages
+        if (!zoneruleset || !zoneruleset.id) {
+          reject(new Error('ZoneRuleset Not found.'))
+        }
 
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    const zoneruleset = zonerulesetmeta.result
-
-    if (!zoneruleset || !zoneruleset.id) {
-      reject(new Error('ZoneRuleset Not found.'))
-    }
-
-    resolve(zoneruleset)
+        resolve(zoneruleset)
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -423,7 +443,7 @@ export async function get_lists(
   cf_account_id: string,
   cf_api_token: string
 ): Promise<ListsResultMeta[]> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/accounts/${cf_account_id}/rules/lists`
 
     const options = {
@@ -435,35 +455,39 @@ export async function get_lists(
       }
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ListsMeta>
+      })
+      .then((listsmeta: ListsMeta) => {
+        if (!listsmeta.success) {
+          const errors = listsmeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const listsmeta = (await response.json()) as ListsMeta
+          const messages = listsmeta.messages
 
-    if (!listsmeta.success) {
-      const errors = listsmeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        const lists = listsmeta.result
 
-      const messages = listsmeta.messages
+        if (!lists || lists.length == 0) {
+          reject(new Error('Lists Not found.'))
+        }
 
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    const lists = listsmeta.result
-
-    if (!lists || lists.length == 0) {
-      reject(new Error('Lists Not found.'))
-    }
-
-    resolve(lists)
+        resolve(lists)
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -477,7 +501,7 @@ export async function create_list(
   cf_api_token: string,
   data: any
 ): Promise<ListsResultMeta> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/accounts/${cf_account_id}/rules/lists`
 
     const options = {
@@ -490,35 +514,39 @@ export async function create_list(
       body: data
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ListMeta>
+      })
+      .then((listmeta: ListMeta) => {
+        if (!listmeta.success) {
+          const errors = listmeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const listmeta = (await response.json()) as ListMeta
+          const messages = listmeta.messages
 
-    if (!listmeta.success) {
-      const errors = listmeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        const result = listmeta.result
 
-      const messages = listmeta.messages
+        if (!result || !result.id) {
+          reject(new Error('List Not found.'))
+        }
 
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    const result = listmeta.result
-
-    if (!result || !result.id) {
-      reject(new Error('List Not found.'))
-    }
-
-    resolve(result)
+        resolve(result)
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -532,7 +560,7 @@ export async function delete_list(
   cf_api_token: string,
   list_id: string
 ): Promise<ListsResultMeta> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/accounts/${cf_account_id}/rules/lists/${list_id}`
 
     const options = {
@@ -544,35 +572,39 @@ export async function delete_list(
       }
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ListMeta>
+      })
+      .then((listmeta: ListMeta) => {
+        if (!listmeta.success) {
+          const errors = listmeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const listmeta = (await response.json()) as ListMeta
+          const messages = listmeta.messages
 
-    if (!listmeta.success) {
-      const errors = listmeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        const result = listmeta.result
 
-      const messages = listmeta.messages
+        if (!result || !result.id) {
+          reject(new Error('List Not found.'))
+        }
 
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    const result = listmeta.result
-
-    if (!result || !result.id) {
-      reject(new Error('List Not found.'))
-    }
-
-    resolve(result)
+        resolve(result)
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -586,7 +618,7 @@ export async function get_list(
   cf_api_token: string,
   list_id: string
 ): Promise<ListsResultMeta> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/accounts/${cf_account_id}/rules/lists/${list_id}`
 
     const options = {
@@ -598,35 +630,39 @@ export async function get_list(
       }
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ListMeta>
+      })
+      .then((listmeta: ListMeta) => {
+        if (!listmeta.success) {
+          const errors = listmeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const listmeta = (await response.json()) as ListMeta
+          const messages = listmeta.messages
 
-    if (!listmeta.success) {
-      const errors = listmeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        const list = listmeta.result
 
-      const messages = listmeta.messages
+        if (!list || !list.id) {
+          reject(new Error('List Not found.'))
+        }
 
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    const list = listmeta.result
-
-    if (!list || !list.id) {
-      reject(new Error('List Not found.'))
-    }
-
-    resolve(list)
+        resolve(list)
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -641,7 +677,7 @@ export async function update_list(
   list_id: string,
   data: any
 ): Promise<ListsResultMeta> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/accounts/${cf_account_id}/rules/lists/${list_id}`
 
     const options = {
@@ -654,35 +690,39 @@ export async function update_list(
       body: data
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ListMeta>
+      })
+      .then((listmeta: ListMeta) => {
+        if (!listmeta.success) {
+          const errors = listmeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const listmeta = (await response.json()) as ListMeta
+          const messages = listmeta.messages
 
-    if (!listmeta.success) {
-      const errors = listmeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        const result = listmeta.result
 
-      const messages = listmeta.messages
+        if (!result || !result.id) {
+          reject(new Error('List Not found.'))
+        }
 
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    const result = listmeta.result
-
-    if (!result || !result.id) {
-      reject(new Error('List Not found.'))
-    }
-
-    resolve(result)
+        resolve(result)
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -697,7 +737,7 @@ export async function delete_list_items(
   list_id: string,
   data: any
 ): Promise<string> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/accounts/${cf_account_id}/rules/lists/${list_id}/items`
 
     const options = {
@@ -710,33 +750,37 @@ export async function delete_list_items(
       body: data
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ResponseMeta>
+      })
+      .then((responsemeta: ResponseMeta) => {
+        if (!responsemeta.success) {
+          const errors = responsemeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const responsemeta = (await response.json()) as ResponseMeta
+          const messages = responsemeta.messages
 
-    if (!responsemeta.success) {
-      const errors = responsemeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        if (!responsemeta || !responsemeta.result) {
+          reject(new Error('Response Or Result Not found.'))
+        }
 
-      const messages = responsemeta.messages
-
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    if (!responsemeta || !responsemeta.result) {
-      reject(new Error('Response Or Result Not found.'))
-    }
-
-    resolve('done')
+        resolve('done')
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -753,7 +797,7 @@ export async function get_list_items(
   per_page = 500,
   search = ''
 ): Promise<ListItemResultMeta[]> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const params = new URLSearchParams()
 
     if (!cursor) {
@@ -778,35 +822,39 @@ export async function get_list_items(
       }
     }
 
-    const response = await fetch(`${url}?${queryString}`, options)
+    fetch(`${url}?${queryString}`, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ListItemsMeta>
+      })
+      .then((listmeta: ListItemsMeta) => {
+        if (!listmeta.success) {
+          const errors = listmeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const listmeta = (await response.json()) as ListItemsMeta
+          const messages = listmeta.messages
 
-    if (!listmeta.success) {
-      const errors = listmeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        const list = listmeta.result
 
-      const messages = listmeta.messages
+        if (!list) {
+          reject(new Error('List Items Not found.'))
+        }
 
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    const list = listmeta.result
-
-    if (!list) {
-      reject(new Error('List Items Not found.'))
-    }
-
-    resolve(list)
+        resolve(list)
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -821,7 +869,7 @@ export async function create_list_items(
   list_id: string,
   data: any
 ): Promise<string> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/accounts/${cf_account_id}/rules/lists/${list_id}/items`
 
     const options = {
@@ -834,33 +882,37 @@ export async function create_list_items(
       body: data
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ResponseMeta>
+      })
+      .then((responsemeta: ResponseMeta) => {
+        if (!responsemeta.success) {
+          const errors = responsemeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const responsemeta = (await response.json()) as ResponseMeta
+          const messages = responsemeta.messages
 
-    if (!responsemeta.success) {
-      const errors = responsemeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        if (!responsemeta || !responsemeta.result) {
+          reject(new Error('Response Or Result Not found.'))
+        }
 
-      const messages = responsemeta.messages
-
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    if (!responsemeta || !responsemeta.result) {
-      reject(new Error('Response Or Result Not found.'))
-    }
-
-    resolve('done')
+        resolve('done')
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
 
@@ -875,7 +927,7 @@ export async function update_all_list_items(
   list_id: string,
   data: any
 ): Promise<string> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const url = `https://api.cloudflare.com/client/v4/accounts/${cf_account_id}/rules/lists/${list_id}/items`
 
     const options = {
@@ -888,32 +940,36 @@ export async function update_all_list_items(
       body: data
     }
 
-    const response = await fetch(url, options)
+    fetch(url, options)
+      .then(async response => {
+        if (!response.ok) {
+          reject(new Error(`Response status: ${response.status}`))
+        }
+        return (await response.json()) as Promise<ResponseMeta>
+      })
+      .then((responsemeta: ResponseMeta) => {
+        if (!responsemeta.success) {
+          const errors = responsemeta.errors
 
-    if (!response.ok) {
-      reject(new Error(`Response status: ${response.status}`))
-    }
+          if (errors && errors.length > 0) {
+            reject(new Error(JSON.stringify(errors, null, 2)))
+          }
 
-    const responsemeta = (await response.json()) as ResponseMeta
+          const messages = responsemeta.messages
 
-    if (!responsemeta.success) {
-      const errors = responsemeta.errors
+          if (messages && messages.length > 0) {
+            reject(new Error(JSON.stringify(messages, null, 2)))
+          }
+        }
 
-      if (errors && errors.length > 0) {
-        reject(new Error(JSON.stringify(errors, null, 2)))
-      }
+        if (!responsemeta || !responsemeta.result) {
+          reject(new Error('Response Or Result Not found.'))
+        }
 
-      const messages = responsemeta.messages
-
-      if (messages && messages.length > 0) {
-        reject(new Error(JSON.stringify(messages, null, 2)))
-      }
-    }
-
-    if (!responsemeta || !responsemeta.result) {
-      reject(new Error('Response Or Result Not found.'))
-    }
-
-    resolve('done')
+        resolve('done')
+      })
+      .catch((error: Error) => {
+        reject(error)
+      })
   })
 }
