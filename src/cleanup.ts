@@ -50,3 +50,6 @@ export async function run(): Promise<void> {
 
   core.info('Done for bypass cloudflare for github action')
 }
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+run()

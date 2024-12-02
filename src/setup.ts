@@ -37,3 +37,6 @@ export function run(): void {
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+run()
