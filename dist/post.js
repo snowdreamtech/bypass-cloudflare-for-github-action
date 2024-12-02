@@ -26303,116 +26303,6 @@ async function update_all_list_items(cf_account_id, cf_api_token, list_id, data)
 
 /***/ }),
 
-/***/ 2293:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.github_meta = github_meta;
-const core = __importStar(__nccwpck_require__(7484));
-/**
- * Get the IPV4 and IPV6 List for the github actions runners.
- *
- * @returns {Promise<Array<string>>} The IPV4 and IPV6 List for the github actions runners.
- */
-async function github_meta() {
-    return new Promise((resolve, reject) => {
-        const github_api_token = core.getInput('github_api_token');
-        if (!github_api_token) {
-            reject(new Error('github_api_token is empty'));
-        }
-        const url = 'https://api.github.com/meta';
-        fetch(url, {
-            headers: {
-                Accept: 'application/vnd.github+json',
-                Authorization: 'Bearer ' + github_api_token,
-                'X-GitHub-Api-Version': '2022-11-28 '
-            }
-        })
-            .then(async (response) => {
-            if (!response.ok) {
-                reject(new Error(`Response status: ${response.status}`));
-            }
-            return (await response.json());
-        })
-            .then((githubmeta) => {
-            resolve([...githubmeta.actions, ...githubmeta.actions_macos]);
-        })
-            .catch((error) => {
-            reject(error);
-        });
-    });
-}
-
-
-/***/ }),
-
-/***/ 526:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.public_ip = public_ip;
-/**
- * Get the public IPV4 and IPV6 for the github actions runner.
- *
- * @returns {Promise<string>} The Public IPV4 and IPV6 for the github actions runner.
- */
-async function public_ip() {
-    return new Promise((resolve, reject) => {
-        const url = 'https://myip.ipip.net/json';
-        fetch(url, {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(async (response) => {
-            if (!response.ok) {
-                reject(new Error(`Response status: ${response.status}`));
-            }
-            return (await response.json());
-        })
-            .then((ipdata) => {
-            if (!ipdata || !ipdata.ip) {
-                reject(new Error('Public IP Not Found.'));
-            }
-            resolve(ipdata.ip);
-        })
-            .catch((error) => {
-            reject(error);
-        });
-    });
-}
-
-
-/***/ }),
-
 /***/ 2759:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -26691,7 +26581,7 @@ async function clean() {
 
 /***/ }),
 
-/***/ 1730:
+/***/ 6661:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -26724,8 +26614,7 @@ exports.run = run;
 const core = __importStar(__nccwpck_require__(7484));
 const single_1 = __nccwpck_require__(4227);
 const list_1 = __nccwpck_require__(2759);
-const ipinfo_1 = __nccwpck_require__(526);
-const githubmeta_1 = __nccwpck_require__(2293);
+// import { public_ip } from './ipinfo'
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -26734,8 +26623,8 @@ async function run() {
     // Executing bypass cloudflare for github action
     core.info('Executing bypass cloudflare for github action');
     // get the public ip for the github actions runner
-    core.info('Get the public ip for the github actions runner');
-    const ip = await (0, ipinfo_1.public_ip)();
+    // core.info('Get the public ip for the github actions runner')
+    // const ip = await public_ip()
     const modestring = core.getInput('mode');
     // Mode
     core.info('The mode for bypass cloudflare for github action is: ' + modestring);
@@ -26744,27 +26633,29 @@ async function run() {
         const mode = modelist[i];
         switch (mode) {
             case 'single': {
-                await (0, single_1.run)(ip);
+                await (0, single_1.clean)();
                 break;
             }
             case 'list': {
-                await (0, list_1.run)(ip);
+                await (0, list_1.clean)();
                 break;
             }
             case 'github': {
-                core.info('Get the IPV4 and IPV6 List for the github actions runners.');
-                const ips = await (0, githubmeta_1.github_meta)();
-                await (0, list_1.run)(ips);
+                // core.info('Get the IPV4 and IPV6 List for the github actions runners.')
+                // const ips = await github_meta()
+                await (0, list_1.clean)();
                 break;
             }
             default: {
-                await (0, list_1.run)(ip);
+                await (0, list_1.clean)();
                 break;
             }
         }
     }
     core.info('Done for bypass cloudflare for github action');
 }
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+run();
 
 
 /***/ }),
@@ -28861,22 +28752,12 @@ module.exports = parseParams
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-var exports = __webpack_exports__;
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-/**
- * The entrypoint for the action.
- */
-const main_1 = __nccwpck_require__(1730);
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(0, main_1.run)();
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(6661);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
