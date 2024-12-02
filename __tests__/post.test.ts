@@ -7,14 +7,14 @@
  */
 
 import * as core from '@actions/core'
-import * as cleanup from '../src/cleanup'
+import * as post from '../src/post'
 import * as single from '../src/single'
 import * as list from '../src/list'
 import * as ipinfo from '../src/ipinfo'
 import * as githubmeta from '../src/githubmeta'
 
 // Mock the action's main function
-const runMock = jest.spyOn(cleanup, 'run')
+const runMock = jest.spyOn(post, 'run')
 const cleanSingleMock = jest.spyOn(single, 'clean')
 const cleanListMock = jest.spyOn(list, 'clean')
 const publicipMock = jest.spyOn(ipinfo, 'public_ip')
@@ -60,7 +60,7 @@ describe('main.ts', () => {
         }
       })
 
-      await cleanup.run()
+      await post.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -95,7 +95,7 @@ describe('main.ts', () => {
         }
       })
 
-      await cleanup.run()
+      await post.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -133,7 +133,7 @@ describe('main.ts', () => {
         }
       })
 
-      await cleanup.run()
+      await post.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -171,7 +171,7 @@ describe('main.ts', () => {
         }
       })
 
-      await cleanup.run()
+      await post.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -209,7 +209,7 @@ describe('main.ts', () => {
         }
       })
 
-      await cleanup.run()
+      await post.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly

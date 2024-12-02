@@ -1,11 +1,11 @@
 /**
- * Unit tests for src/setup.ts
+ * Unit tests for src/pre.ts
  */
-import * as setup from '../src/pre'
+import * as pre from '../src/pre'
 import * as core from '@actions/core'
 
-// Mock the action's setup run function
-const runMock = jest.spyOn(setup, 'run')
+// Mock the action's pre run function
+const runMock = jest.spyOn(pre, 'run')
 
 const cf_zone_id = 'cebf9da524194227af8cae730746f4ca'
 const cf_api_token = '908e1ce7ffdf4bff9edd0524ab7e3b6b'
@@ -21,7 +21,7 @@ let getInputMock: jest.SpiedFunction<typeof core.getInput>
 let setFailedMock: jest.SpiedFunction<typeof core.setFailed>
 // let setOutputMock: jest.SpiedFunction<typeof core.setOutput>
 
-describe('setup.ts', () => {
+describe('pre.ts', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
@@ -52,7 +52,7 @@ describe('setup.ts', () => {
         }
       })
 
-      setup.run()
+      pre.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -98,7 +98,7 @@ describe('setup.ts', () => {
         }
       })
 
-      setup.run()
+      pre.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -143,7 +143,7 @@ describe('setup.ts', () => {
         }
       })
 
-      setup.run()
+      pre.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -188,7 +188,7 @@ describe('setup.ts', () => {
         }
       })
 
-      setup.run()
+      pre.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
@@ -233,7 +233,7 @@ describe('setup.ts', () => {
         }
       })
 
-      setup.run()
+      pre.run()
       expect(runMock).toHaveReturned()
 
       // Verify that all of the core library functions were called correctly
