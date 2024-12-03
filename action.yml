@@ -1,0 +1,55 @@
+name: 'Bypass Cloudflare for Github Action Pro'
+description:
+  'bypass cloudflare for github action, never receive 403 forbidden from
+  cloudflare again.'
+author: 'Snowdream Tech'
+
+# Add your action's branding here. This will appear on the GitHub Marketplace.
+branding:
+  icon: 'activity'
+  color: 'green'
+
+# Define your inputs here.
+inputs:
+  mode:
+    description: 'single/list/github'
+    required: false
+    default: 'github,list'
+  cf_zone_id:
+    description: 'Cloudflare Zone ID'
+    required: true
+  cf_api_token:
+    description: 'Cloudflare API Token'
+    required: true
+  cf_account_id:
+    description: 'Cloudflare Account ID'
+    required: true
+  github_api_token:
+    description: 'Github API Token'
+    required: true
+  single_rule_description:
+    description: 'Rule Description For Mode Single'
+    required: false
+    default: 'Bypass Cloudflare for GitHub Action (Single)'
+  list_rule_description:
+    description: 'Rule Description For Mode List'
+    required: false
+    default: 'Bypass Cloudflare for GitHub Action (List)'
+  list_name:
+    description: 'List name'
+    required: false
+    default: 'github_actions_runners'
+  clean:
+    description: 'Caution: It will remove your zone ruleset rule and your list'
+    required: false
+    default: 'false'
+# Define your outputs here.
+outputs:
+  time:
+    description: 'Time when finished.'
+
+runs:
+  using: node20
+  pre: 'dist/pre.js'
+  main: 'dist/index.js'
+  post: 'dist/post.js'
