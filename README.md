@@ -34,7 +34,7 @@ Cloudflare's firewall
 
 | Input                     | Description                                                  | Required | Default                                      |
 | ------------------------- | ------------------------------------------------------------ | -------- | -------------------------------------------- |
-| `mode`                    | single/list/github                                           | false    | github,list                                  |
+| `mode`                    | single/list/github                                           | false    | github                                       |
 | `cf_zone_id`              | Cloudflare Zone ID                                           | true     | /                                            |
 | `cf_api_token`            | Cloudflare API Token                                         | true     | /                                            |
 | `cf_account_id`           | Cloudflare Account ID                                        | true     | /                                            |
@@ -67,7 +67,7 @@ jobs:
       - name: Bypass Cloudflare for Github Action Pro
         uses: snowdreamtech/bypass-cloudflare-for-github-action@v0.0.3
         with:
-          mode: 'github,list'
+          mode: 'github'
           cf_account_id: ${{ secrets.CF_ACCOUNT_ID }}
           cf_api_token: ${{ secrets.CF_API_TOKEN }}
           cf_zone_id: ${{ secrets.CF_ZONE_ID }}

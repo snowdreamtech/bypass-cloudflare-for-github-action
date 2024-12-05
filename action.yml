@@ -14,7 +14,7 @@ inputs:
   mode:
     description: 'single/list/github'
     required: false
-    default: 'github,list'
+    default: 'github'
   cf_zone_id:
     description: 'Cloudflare Zone ID'
     required: true
