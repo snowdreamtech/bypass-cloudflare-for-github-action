@@ -14,7 +14,7 @@ Inspired by
 Requests from GitHub Action servers to a Cloudflare proxied host may be blocked
 by
 [Cloudflare's Web Application Firewall(WAF)](https://developers.cloudflare.com/support/troubleshooting/http-status-codes/4xx-client-error/)
-or [Bot Fight Mode](https://developers.cloudflare.com/bots/get-started/free/).
+or [Super Bot Fight Mode](https://developers.cloudflare.com/bots/get-started/pro/) .
 This action automatically adds the public IP of the GitHub Action runner to
 Cloudflare's firewall
 [Custom rules](https://developers.cloudflare.com/waf/custom-rules/) or
